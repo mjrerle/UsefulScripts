@@ -1,0 +1,7 @@
+lock_dir=".mozilla/firefox/4p7zeyje.default/"
+lock=""
+if [[ -f $lock ]]; then
+  rm $lock
+else
+  echo "Lock does not exist" >&2
+fi

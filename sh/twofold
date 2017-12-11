@@ -1,0 +1,23 @@
+#!/bin/bash
+###
+ # Created by sswensen on 4/24/17.
+ # This tiny program runs two linux commands at the same time
+
+ 	# Remember to `chmod +x ss` before running the file
+###
+
+usage(){
+  echo "$0: <cmd> <cmd>"
+}
+
+if [[ $#!=2 ]]; then
+  usage
+  exit
+fi
+
+for i in "$@"; do {
+  $i&s=$!
+  l+=" $s";
+} done
+trap "kill $l" SIGINT
+wait $l

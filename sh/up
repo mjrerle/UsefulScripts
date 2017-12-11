@@ -1,0 +1,26 @@
+#!/bin/bash
+usage(){
+  echo "$0: [directory] [base: OPTIONAL]
+        Description: This program will climb the directory tree until it finds the specified directory in argument 2" >&2
+}
+p=$PWD
+base=""
+stop_here=""
+flag=true
+if (( $#==2 )); then
+  base="$HOME/$2"
+  stop_here="$base/$1"
+elif (( $#==1 )); then
+  base="$HOME"
+  stop_here="$base/$1"
+else
+  cd $HOME
+  flag=false
+fi
+
+if $flag; then
+  while [[ "$p" != "$stop_here" ]]; do
+    cd ..
+    p=$PWD
+  done
+fi

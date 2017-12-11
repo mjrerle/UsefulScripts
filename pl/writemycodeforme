@@ -1,0 +1,15 @@
+#!/usr/bin/perl -w
+use 5.19.1;
+my $filename = "map.svg";
+my $output = "code";
+my @array;
+open(my $fh1, '<:encoding(UTF-8)',$filename) or die;
+while(my $row = <$fh1>){
+  chomp $row;
+  $row =~ s/\"/\\\"/g;
+  push @array, "map+=\"$row\";\n";
+}
+close $fh1;
+open(my $fh2, '>', $output) or die;
+  print $fh2 @array;
+close $fh2;

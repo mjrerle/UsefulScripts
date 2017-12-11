@@ -1,0 +1,12 @@
+#!/bin/bash
+if (( $#==1 )); then
+    nautilus $1 >/dev/null 2>&1 &
+elif (( $#>1 )); then
+    while (( "$#" )); do
+        nautilus $1 >/dev/null 2>&1 &
+        shift
+    done
+else
+    nautilus $PWD >/dev/null 2>&1 &
+fi
+

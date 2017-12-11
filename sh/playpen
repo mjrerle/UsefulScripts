@@ -1,0 +1,18 @@
+#! /bin/bash
+#
+# Go into a temporary “playpen” directory; clean it up when done.
+
+# If we can’t execute a file in TMPDIR, then change it to somewhere executable.
+script=$(mktemp -t playpen-script-XXXXXX)
+chmod u=rx,go= "$script"
+"$script" 2>&- || TMPDIR=~/tmp
+rm -f "$script"
+
+cd "$(mktemp -d -t playpen-XXXXXX)"	# Create temporary dir.
+cp -r ~/.playpen/* . 2>&-		# Files to play with
+chmod -R u+rw .				# Works even if no files got copied.
+ls -lhog | grep -v '^total '		# Show what’s here.
+$SHELL
+chmod -R u=rwx .			# Make everything removable.
+cd /tmp					# Get away from temporary directory.
+rm -rf $OLDPWD				# Remove previous, temporary, directory.

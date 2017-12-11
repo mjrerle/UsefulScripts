@@ -1,0 +1,22 @@
+#!/usr/bin/python
+import sys
+height=512.0;
+width=1024.0;
+lng=float(sys.argv[1]);
+lat=float(sys.argv[2]);
+#if(lng < 0):
+#    rat1 = -180.0
+#else:
+#    rat1 = 180.0
+#
+#if(lat < 0):
+#    rat2 = 90.0
+#else:
+#    rat2 = -90.0
+rat1=-180.0;
+rat2=90.0;
+x=(width -width*(lng/rat1))/2;
+y=(height-height*(lat/rat2))/2;
+lst=[x,y];
+print(lst);
+

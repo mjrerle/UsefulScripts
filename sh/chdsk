@@ -1,0 +1,24 @@
+#!/bin/bash
+home=$HOME
+program=$(basename "$0")
+filename="$program-diskusage.stat"
+path="$home/out/$filename"
+if (( $#==1 )); then
+  pushd $1 >/dev/null
+  size=$(du -sb $1 | cut -f1)
+elif (( $#==2 )); then
+  pushd $1 >/dev/null
+  path="$PWD/$2"
+  size=$(du -sb $1 | cut -f1)
+else
+  pushd $home >/dev/null
+  size=$(du -sb $home | cut -f1)
+fi
+echo "Disk Usage data saved to $path."
+echo "Finding largest directories..."
+let exp=7*10**9
+echo "Total disk usage is $size bytes out of 7000M($exp) available" > $path
+percent_used=$(echo "100 * ($size / $exp)" | bc -l)
+echo "Used $percent_used% of given disk." >> $path
+du -sh * .??* | sort -rn >> $path
+popd >/dev/null
