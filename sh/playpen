@@ -1,5 +1,5 @@
 #! /bin/bash
-#
+# credit to Jack Applin at CSU
 # Go into a temporary “playpen” directory; clean it up when done.
 
 # If we can’t execute a file in TMPDIR, then change it to somewhere executable.
