@@ -1,0 +1,4 @@
+#!/bin/bash
+pushd $HOME/src/UsefulScripts >/dev/null
+find $HOME/src/UsefulScripts -type f -not -path "*.git*" -exec bash -c 'ln -s {} $HOME/bin/$(basename {})' \;
+popd >/dev/null

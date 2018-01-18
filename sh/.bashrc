@@ -289,23 +289,9 @@ esac
 
 
 #bad hosts
-if [[ "$HOSTNAME" = "jefferson-city" ]]; then
-  sleep 5
-  zenity --info --text="<b>Scroll button</b> does not work ya idiot" --title="Find another computer!!!" --ok-label="Ok thank you for the tip Matt"
-  exit 1
-elif [[ "$HOSTNAME" = "harrisburg" ]]; then
-  sleep 5
-  zenity --info --text="<b>Mouse 3</b> does not work ya idiot" --title="Find another computer!!!" --ok-label="Ok thank you for the tip Matt"
-  exit 1
-elif [[ "$HOSTNAME" = "denver" ]]; then
-  sleep 5
-  zenity --info --text="<b>Why?</b> Why would you log into denver? Everyone and their mom uses it " --title="Find another computer!!!" --ok-label="Ok thank you for the tip Matt"
-  exit 1
-elif [[ "$HOSTNAME" = "boston" ]]; then
-  sleep 5
-  zenity --info --text="<b>Scroll button</b> does not work ya idiot" --title="Find another computer!!!" --ok-label="Ok thank you for the tip Matt"
 
-fi
+
+####
 
 umask u=rwx,g=r,o=r
 
@@ -348,6 +334,7 @@ alias cp='cp -i'
 alias mv='mv -i'
 # -> Prevents accidentally clobbering files.
 alias mkdir='mkdir -p'
+alias md='mkdir -p'
 
 alias h='history'
 alias j='jobs -l'
@@ -359,6 +346,7 @@ alias cm="chmod u+x $1"
 alias path='echo -e ${PATH//:/\\n}'
 alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 
+alias myip='hostname -I | cut -d" " -f1'
 
 alias du='du -kh'    # Makes a more readable output.
 alias df='df -kTh'
