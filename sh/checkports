@@ -9,5 +9,6 @@ fi
 port=$1
 out=$(lsof -i:$port)
 count=$( $out | wc -l )
+if (( $count==0 )); then exit 0; fi
 echo "$0: $count ports listening on port $port"
 echo "$out"
