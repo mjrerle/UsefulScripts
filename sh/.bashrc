@@ -28,11 +28,13 @@ export HISTSIZE=1024
 
 # uncomment and change preferred printer
 # see ~info/printers
-#export PRINTER=banjo
+export PRINTER=tuba
 
 # use less to page
 export PAGER='less'
 alias intellij='/usr/local/idea/bin/idea.sh'
+export GOPATH="$HOME/go"
+export PATH="$PATH/usr/local/go/bin"
 
 # safe mode for rm, cp, and mv
 # uncomment to ask for confirmation
@@ -134,7 +136,6 @@ On_White='\e[47m'       # White
 NC="\e[m"               # Color Reset
 
 ALERT=${BWhite}${On_Red} # Bold White on red background
-
 echo -e "${BCyan}This is BASH ${BRed}${BASH_VERSION%.*}${BCyan}\
 - DISPLAY on ${BRed}$DISPLAY${NC}\n"
 date
@@ -142,6 +143,7 @@ function _exit()              # Function to run upon exit of shell.
 {
     echo -e "${BRed}Hasta la vista, baby${NC}"
 }
+cal --color
 trap _exit EXIT
 
 #-------------------------------------------------------------
@@ -347,6 +349,7 @@ alias path='echo -e ${PATH//:/\\n}'
 alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 
 alias myip='hostname -I | cut -d" " -f1'
+alias locate='locate -d ~/data/.filesdb'
 
 alias du='du -kh'    # Makes a more readable output.
 alias df='df -kTh'
@@ -417,9 +420,92 @@ function fe() { find . -type f -iname '*'"${1:-}"'*' \
 
 ### useful scripts
 alias chdsk="$HOME/bin/chdsk $1; if (( $#<2)); then less $HOME/out/chdsk-diskusage.stat; else less $PWD/$2; fi"
+alias dkstat="less $HOME/out/chdsk-diskusage.stat"
 
 alias up=". $HOME/bin/up"
 alias checkports="$HOME/bin/checkports"
 alias twofold="$HOME/bin/twofold"
 
 alias folder="$HOME/bin/folder"
+alias o="xdg-open &> /dev/null &"
+alias gol="$HOME/goland/bin/goland.sh &> /dev/null &"
+alias clion="$HOME/clion/bin/clion.sh &> /dev/null &"
+
+
+
+#use pushd/popd by default, if directory is a file, open with vim
+
+function cd(){
+    if [[ "$#" = "0" ]]; then
+        pushd ${HOME} > /dev/null
+    elif [[ -f "${1}" ]]; then
+        ${EDITOR} ${1}
+    else
+        pushd "$1" > /dev/null
+    fi
+}
+
+function bd(){
+    if [[ "$#" = "0" ]]; then
+        popd >/dev/null
+    else
+        for i in $(seq ${1}); do
+            popd > /dev/null
+        done
+    fi
+}
+
+#bookmark manager
+function bm() {
+    bookmark_storage="${HOME}/.bookmarks"
+    USAGE="Usage: bm [-c|-g|-d|-l] [bookmark]
+    bm -c <bookmark>
+        Bookmark the current directory under <bookmark>
+    bm -g <bookmark>
+        Go to the directory saved under <boomark>
+    bm -d <boomark>
+        Delete directory under <bookmark>
+    " ;
+    if  [ ! -e ${bookmark_storage} ] ; then
+        mkdir ${bookmark_storage}
+    fi
+
+    case $1 in
+        # create bookmark
+        -c) shift
+            if [ ! -f ${bookmark_storage}/$1 ] ; then
+                echo "$(pwd)" > ${bookmark_storage}/"$1" ;
+            else
+                echo "Try again! Looks like there is already a bookmark '$1'"
+            fi
+            ;;
+        # goto bookmark
+        -g) shift
+            if [ -f ${bookmark_storage}/${1} ] ; then
+                cd $(cat ${bookmark_storage}/${1})
+            else
+                echo "Mmm...looks like your bookmark has spontaneously combusted. What I mean to say is that your bookmark does not exist." ;
+            fi
+            ;;
+        # delete bookmark
+        -d) shift
+            if [ -f ${bookmark_storage}/$1 ] ; then
+                rm ${bookmark_storage}/"$1" ;
+            else
+                echo "Oops, forgot to specify the bookmark" ;
+            fi
+            ;;
+        # list bookmarks
+        -l) shift
+            for bookmark in ${bookmark_storage}/*
+            do
+                echo  "$(basename ${bookmark}) -> $(cat ${bookmark})" ;
+            done
+
+            ;;
+         *) echo "$USAGE" ;
+            ;;
+    esac
+}
+
+
